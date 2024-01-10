@@ -5,23 +5,24 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
-import static org.springframework.data.mongodb.core.aggregation.SelectionOperators.First.first;
-
+import java.util.List;
 @Service
 public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
+
     public Review createReview(String reviewBody, String songID){
+        // Create a new review
         Review review = reviewRepository.insert(new Review(reviewBody));
 
-      mongoTemplate.update(Song.class)
-              .matching(Criteria.where("songID").is(songID))
-              .apply(new Update().push("reviewIds").value(review))
-              .first();
+        // Update the corresponding Song document to include the new review reference
+        mongoTemplate.update(Song.class)
+                .matching(Criteria.where("songID").is(songID))
+                .apply(new Update().push("reviewIds").value(review.getId()))
+                .first();
 
-              return review;
+        return review;
     }
 }
