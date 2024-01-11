@@ -18,12 +18,12 @@ public class SongController {
     private SongService songService;
     @GetMapping
     public ResponseEntity<List<Song>> getAllSongs(){
-  return new ResponseEntity<List<Song>>(songService.allSongs(), HttpStatus.OK);
+        return new ResponseEntity<List<Song>>(songService.allSongs(), HttpStatus.OK);
 
     }
 
     @GetMapping("/{songID}")
     public ResponseEntity<Optional<Song>> getSingleSong(@PathVariable String songID){
-    return new ResponseEntity<Optional<Song>>(songService.singleSong(songID), HttpStatus.OK);
+        return new ResponseEntity<Optional<Song>>(songService.singleSong(songID), HttpStatus.OK);
     }
 }
